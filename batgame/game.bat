@@ -12,13 +12,16 @@ set /a selected=2
 set "location=menu"
 set /a delay=0
 
-set "name= NAME "
+set "user=NAME"
+set "name=[%user%]"
+set "size= SIZE "
+set "colors= COLORS "
 
 
 
 ::GAME LOOP
 :gameloop
-
+cls
 if !location!==menu (
     call :menu
     set /a delay=1
@@ -55,9 +58,9 @@ goto gameloop
     echo            ^|____MENU____^|
     echo.
     echo            ^|------------^|
-    echo            ^| %settings% ^|
-    echo            ^|   %play%   ^|
-    echo            ^|  %scores%  ^|
+    echo            ^| !settings! ^|
+    echo            ^|   !play!   ^|
+    echo            ^|  !scores!  ^|
     echo            ^|------------^|
     echo.
     echo.
@@ -72,12 +75,14 @@ goto gameloop
     echo            ^|__SETTINGS__^|
     echo.
     echo            ^|------------^|
-    echo            ^|   %name%   ^|
-    echo            ^|            ^|
+    echo            ^|   !name!   ^|
+    echo            ^|   !size!   ^|
+    echo            ^|  !colors!  ^|
     echo            ^|------------^|
     echo.
     echo.
     choice /c 82eqn /d n /t 1 /n /m "(8=up | 2=down | e=enter | q=quit): "
+    call :settings_choice
     exit /b
 ::###############################################################
 
@@ -136,24 +141,23 @@ goto gameloop
             call :settingsdisplay
         )
     ) else if !errorlevel!==3 (
-        if !selected!==3 set "location=name"
-        if !selected!==2 set "location=play"
-        if !selected!==1 set "location=scores"
+        if !selected!==3 (
+            set /p "user=Name(Enter to confirm): "
+            set "user=!user:~0,4!"
+            call :settingsdisplay
+        )
+        if !selected!==2 echo.
+        if !selected!==1 echo.
     ) else if !errorlevel!==4 (
-        cls
-        set "goodbye=Good Bye :) <3..."
-        echo.
-        echo.
-        echo.
-        echo.
-        echo.
-        echo.
-        echo            !goodbye!
-        call :timer 300
-        exit
+        set "location=menu"
     )
     exit /b
 
 :settingsdisplay
-    set "name= NAME "
+    set "name= !user! "
+    set "size= SIZE "
+    set "colors= COLORS "
+    if !selected!==3 set "name=[!user!]"
+    if !selected!==2 set "size=[SIZE]"
+    if !selected!==1 set "colors=[COLORS]"
     exit /b

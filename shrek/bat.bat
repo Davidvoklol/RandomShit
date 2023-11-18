@@ -4,7 +4,7 @@ mode 150
 
 set /A a=0
 set /A b=19
-
+type shrek.txt
 :start
 
 set /A a+=1
@@ -31,8 +31,6 @@ if %a%==19 color e
 
 if %a%==%b% (
 	set /A a=0
-	cls
-	type shrek.txt
 )
 
 goto start
